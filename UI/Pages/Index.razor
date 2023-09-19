@@ -1,17 +1,101 @@
-﻿@using Feeder.FeedSources;
+﻿@using BlazorSciFi
+@using Feeder.FeedSources;
 @using Feeder.Rss;
+@using Feeder;
+@using UI.Services;
 
-<h3>Index</h3>
+@implements IDisposable
+
+<div class="page scifi dark">
+    <div class="layout-h">
+        @* MENU *@
+        <div class="min">
+            @foreach (var channel in FeedService.GetChannels())
+            {
+                <div class="btn block" @onclick="() => selectedChannel = channel">
+                    @channel.Title.SubstringMax(1)
+                </div>
+            }
+
+            <div class="btn block" @onclick="OpenConfigOverlay">⚙</div>
+        </div>
+
+        @* CONTENT *@
+        <div class="fill">
+            @if (selectedChannel != null)
+            {
+                foreach (var item in selectedChannel.Items)
+                {
+                    <div class="card @FeedService.IsRead(item.Guid).If(null, "unsafe") margin-l">
+                        <div class="card-header">
+                            @item.Title
+
+                            <span class="right">
+                                <span class="btn small" @onclick="() => MarkRead(item.Guid)">✔</span>
+                            </span>
+                        </div>
+
+                        <div class="card-content">
+                            @item.Description
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+    </div>
+
+    <Overlay Show="@showConfigOverlay">
+        <AppSettingEditor OnDone="OnConfigDone" />
+    </Overlay>
+</div>
 
 @code {
+    private IDisposable? refreshSubscription;
+    private Channel? selectedChannel;
+
+    private bool showConfigOverlay = false;
+
     [Inject]
     public required HttpClient HttpClient { get; init; }
 
-    protected override async Task OnInitializedAsync()
-    {
-        var source = new HttpFeedSource(HttpClient, "https://telex.hu/rss/archivum");
-        var reader = new RssFeedReader(source);
+    [Inject]
+    public required IFeedService FeedService { get; init; }
 
-        var result = await reader.Read();
+    public void Dispose()
+    {
+        refreshSubscription?.Dispose();
+    }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        refreshSubscription = FeedService.OnRefresh.Subscribe(channels => OnRefresh());
+    }
+
+    private void OpenConfigOverlay()
+    {
+        showConfigOverlay = true;
+    }
+
+    private void OnConfigDone()
+    {
+        showConfigOverlay = false;
+    }
+
+    private void OnRefresh()
+    {
+        var channels = FeedService.GetChannels();
+
+        if (selectedChannel == null && channels.Count() > 0)
+        {
+            selectedChannel = channels.First();
+        }
+
+        StateHasChanged();
+    }
+
+    private void MarkRead(string guid)
+    {
+        FeedService.MarkRead(guid);
     }
 }

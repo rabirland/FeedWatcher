@@ -1,12 +1,17 @@
 ﻿using Feeder;
 
-namespace UI.Services._FeedService;
+namespace UI.Services;
 
 /// <summary>
 /// Manages the feeds and their states.
 /// </summary>
 public interface IFeedService
 {
+    /// <summary>
+    /// Fired when the channels are refreshed.
+    /// </summary>
+    IObservable<IEnumerable<Channel>> OnRefresh { get; }
+
     /// <summary>
     /// Get all the channels.
     /// </summary>
@@ -25,4 +30,10 @@ public interface IFeedService
     /// </summary>
     /// <param name="guid"></param>
     void MarkRead(string guid);
+
+    /// <summary>
+    /// Reload all the channels from all the sources.
+    /// </summary>
+    /// <returns></returns>
+    Task Refresh();
 }

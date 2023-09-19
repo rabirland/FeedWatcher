@@ -1,6 +1,7 @@
+using BlazorSciFi;
 using Microsoft.AspNetCore.Components.WebView.WindowsForms;
 using Microsoft.Extensions.DependencyInjection;
-using System.Windows.Forms.Design;
+using UI.Services;
 
 namespace UI;
 
@@ -14,6 +15,10 @@ public partial class Form1 : Form
         var services = new ServiceCollection();
 
         services.AddTransient<HttpClient>();
+        services.AddSingleton<IFeedService, AppSettingsFeedService>();
+        services.AddSingleton<ISettingsService<AppSettings>, JsonSettingsService<AppSettings>>(provider =>
+            new JsonSettingsService<AppSettings>("config.json", () => new()));
+        services.ConfigureBlazorScifi();
 
         services.AddWindowsFormsBlazorWebView();
 #if DEBUG

@@ -14,10 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Shared\" />
-  </ItemGroup>
-
-  <ItemGroup>
+    <ProjectReference Include="..\..\PrinterManager\BlazorScifi\BlazorSciFi.csproj" />
     <ProjectReference Include="..\Feeder\Feeder.csproj" />
   </ItemGroup>
 

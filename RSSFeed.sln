@@ -5,7 +5,9 @@ VisualStudioVersion = 17.7.34018.315
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UI", "UI\UI.csproj", "{C9615D7D-62C2-47AD-9D39-55BCCECFB1B5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Feeder", "Feeder\Feeder.csproj", "{02D19CCD-DD92-410A-9CDF-A1BF735F7082}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Feeder", "Feeder\Feeder.csproj", "{02D19CCD-DD92-410A-9CDF-A1BF735F7082}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BlazorSciFi", "..\PrinterManager\BlazorScifi\BlazorSciFi.csproj", "{6B49E02D-A777-47DE-87DF-413A7F3500CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +23,10 @@ Global
 		{02D19CCD-DD92-410A-9CDF-A1BF735F7082}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{02D19CCD-DD92-410A-9CDF-A1BF735F7082}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{02D19CCD-DD92-410A-9CDF-A1BF735F7082}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6B49E02D-A777-47DE-87DF-413A7F3500CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6B49E02D-A777-47DE-87DF-413A7F3500CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6B49E02D-A777-47DE-87DF-413A7F3500CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6B49E02D-A777-47DE-87DF-413A7F3500CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

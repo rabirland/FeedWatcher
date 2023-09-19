@@ -1,16 +1,12 @@
-﻿namespace UI;
+﻿using static UI.AppSettings;
 
-public class AppSettings
+namespace UI;
+
+public record AppSettings(IEnumerable<Feed> Feeds, IEnumerable<string> ReadArticles)
 {
-    /// <summary>
-    /// The list of configured feeds.
-    /// </summary>
-    public List<Feed> Feeds { get; set; } = new();
-
-    /// <summary>
-    /// The list of article GUIDs that are already read.
-    /// </summary>
-    public List<string> ReadArticles { get; set; } = new();
+    public AppSettings() : this(Enumerable.Empty<Feed>(), Enumerable.Empty<string>())
+    {
+    }
 
     public readonly record struct Feed(FeedProvider Provider, string Uri);
 

@@ -1,0 +1,72 @@
+﻿@using BlazorSciFi
+@using UI.Services;
+
+<div class="panel">
+    <div class="title">
+        Feed sources
+    </div>
+
+    @foreach (var entry in feeds)
+    {
+        <div>
+            <SelectEnum @bind-Value="entry.Provider" />
+            <input class="input" @bind-value="entry.Uri"/>
+        </div>
+    }
+    <div>
+        <span class="btn" @onclick="OnNewFeedEntry">+</span>
+        <span class="btn" @onclick="Save">Save</span>
+        <span class="btn" @onclick="Close">Close</span>
+    </div>
+</div>
+
+@code {
+    private List<FeedEntry> feeds = new();
+
+    [Inject]
+    public required ISettingsService<AppSettings> SettingsService { get; init; }
+
+    [Parameter]
+    public EventCallback OnDone { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Load();
+    }
+
+    private void OnNewFeedEntry()
+    {
+        feeds.Add(new(AppSettings.FeedProvider.Rss, ""));
+    }
+
+    private record FeedEntry(AppSettings.FeedProvider Provider, string Uri)
+    {
+        public AppSettings.FeedProvider Provider { get; set; } = Provider;
+        public string Uri { get; set; } = Uri;
+    }
+
+    private void Save()
+    {
+        var currentSettings = SettingsService.Get();
+        var updatedSettings = currentSettings with
+        {
+            Feeds = feeds.Select(f => new AppSettings.Feed(f.Provider, f.Uri)),
+        };
+
+        SettingsService.Update(updatedSettings);
+        OnDone.InvokeAsync();
+    }
+
+    private void Close()
+    {
+        OnDone.InvokeAsync();
+    }
+
+    private void Load()
+    {
+        var currentSettings = SettingsService.Get();
+        feeds.Clear();
+        feeds.AddRange(currentSettings.Feeds.Select(f => new FeedEntry(f.Provider, f.Uri)));
+    }
+}
