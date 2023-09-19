@@ -1,0 +1,17 @@
+﻿@using Feeder.FeedSources;
+@using Feeder.Rss;
+
+<h3>Index</h3>
+
+@code {
+    [Inject]
+    public required HttpClient HttpClient { get; init; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        var source = new HttpFeedSource(HttpClient, "https://telex.hu/rss/archivum");
+        var reader = new RssFeedReader(source);
+
+        var result = await reader.Read();
+    }
+}
